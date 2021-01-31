@@ -7,8 +7,7 @@
 //Encodes the string `plaintext` using the Caesar cipher by
 //shifting characters key` positions in the alphabet 
 void encode(char *plaintext, int key)
-{
-	
+{	
 	for (int i = 0; i < strlen(plaintext); i++){
 		int start = toupper(plaintext[i])-65;
 		int placement = (start + key)%26;
