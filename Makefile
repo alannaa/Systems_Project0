@@ -1,2 +1,2 @@
 all:
-	gcc -o caesar caesar.c
+	gcc -o caesar caesar_main.c
