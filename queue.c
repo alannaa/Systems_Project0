@@ -2,8 +2,20 @@
 #include <stdlib.h>
 #include "queue.h"
 
+//Creates a single object of type `process_t`
+process_t* makeProcess(int id, char* name)
+{
+	process_t* newProc = (process_t*)malloc(sizeof(process_c));
+	if (newProc==NULL){
+		return NULL;
+	}
+	newProc->id = id;
+	newProc->name = name;
+	return newProc;
+}
+
 //Creates a single node with `next` set to NULL
-node_t* createNode(void *element)
+node_t* makeNode(void *element)
 {
 	node_t* newNode = (node_t*)malloc(sizeof(node_t));
 	if (newNode==NULL){
@@ -15,7 +27,7 @@ node_t* createNode(void *element)
 }
 
 //Allocates heap space to a queue; `head` and `tail` set to NULL
-queue_t* createQueue()
+queue_t* makeQueue()
 {
 	queue_t* newQ = (queue_t*)malloc(sizeof(queue_t));
 	if (newQ==NULL){
@@ -33,7 +45,7 @@ void enqueue(queue_t *queue, void *element)
 		return;
 	}
 
-	node_t* newNode = createNode(element*);
+	node_t* newNode = makeNode(element);
 	
 	if (queue->head==NULL && queue->tail==NULL){
 		queue->head = newNode;
@@ -59,7 +71,7 @@ void* dequeue(queue_t *queue)
 
 
 //Printing Helpers
-void printProcess(process_t* process)
+void printProcess(process_t *process)
 {
         if (process==NULL){
                 printf("element is NULL");
@@ -70,7 +82,7 @@ void printProcess(process_t* process)
 }
 
 //Prints a queue that specifically contains type `process_t` 
-void printQueue(queue_t* queue)
+void printQueue(queue_t *queue)
 {
 	if(queue==NULL){
 		printf("queue is null");
@@ -88,7 +100,19 @@ void printQueue(queue_t* queue)
 	printf("\n");
 }
 
-
+//Frees a node and free its data
+//Note: if node data contains fields with further allocated data,
+//this function will not free that data (does not apply in this assignent)
+void freeNode(node_t *node)
+{
+	if (node==NULL){
+		return;
+	}
+	if (node->data!=NULL){
+		free(node->data);
+	}
+	free(node);
+}
 
 //Frees a queue and all of its nodes from heap memory 
 //Note: this will not free elements that have been dequeued
@@ -99,9 +123,9 @@ void freeQueue(queue_t *queue)
 	}
 	node_t* nodeItr = queue->head;
 	while(nodeItr!=NULL){
-		node_t* temp = nodeItr;
-		free(nodeItr);
-		nodeItr = temp->next;
+		node_t* temp = nodeItr->next;
+		freeNode(nodeItr);
+		nodeItr = temp;
 	}
 	free(queue);
 }

@@ -5,13 +5,16 @@
 
 int main() {
 
-//Examples
-process_t* procA = createProcess(0, "A");
-process_t* procB = createProcess(1, "B");
-process_t* procC = createProcess(2, "C");
+//Process Examples
+process_t* procA = makeProcess(0, "A");
+process_t* procB = makeProcess(1, "B");
+process_t* procC = makeProcess(2, "C");
 
-queue_t* queue = createQueue();
+printf("%d %s\n", procA->id, procA->name);
 
+
+//queue_t* queue = createQueue();
+/*
 printQueue(queue);	
 enqueue(queue, procA);
 enqueue(queue, procB);
@@ -27,7 +30,7 @@ free(dequeue(queue));
 free(dequeue(queue));
 
 free(queue);
-
+*/
 
 return 0;
 }
