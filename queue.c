@@ -103,6 +103,14 @@ void printQueue(queue_t *queue)
 	printf("\n");
 }
 
+//Assists in organizing output for main method tests
+void printHelper(char* msg, queue_t* queue, process_t* proc)
+{
+        printf("%s",msg);
+        printProcess(proc);
+        printQueue(queue);
+}
+
 //Frees a node and free its data
 //Note: if node data contains fields with further allocated data,
 //this function will not free that data (does not apply in this assignent)

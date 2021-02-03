@@ -3,15 +3,6 @@
 #include <assert.h>
 #include "queue.c"
 
-//This could be added to queue.c but is very specific to the needs of 
-//this main method and not very general, so I kept it here:
-void printHelper(char* msg, queue_t* queue, process_t* proc)
-{
-	printf("%s",msg);
-	printProcess(proc);
-	printQueue(queue);
-}
-
 int main() {
 
 //Process Examples
@@ -56,7 +47,6 @@ printHelper("Dequeue: ", queue, procD);
 
 printQueue(queue);
 
-
 free(deQA);
 free(deQB);
 free(deQC);
@@ -66,6 +56,13 @@ free(deQ3A);
 freeQueue(queue);
 
 
+//Constuct a small queue with elements to test if freeQueue frees all elements of a queue
+//(succeeds using valgrind)
+queue_t* testFree = makeQueue();
+enqueue(testFree, makeProcess(1, "x"));
+enqueue(testFree, makeProcess(1, "y"));
+enqueue(testFree, makeProcess(1, "z"));
+freeQueue(testFree);
 
 return 0;
 }
