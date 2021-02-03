@@ -2,19 +2,23 @@
 typedef struct process{
 	int id;
 	char* name;
-	struct process* next;
 }process_t;
 
+typedef struct node{
+	void* data;
+	struct node* next;
+}node_t;
+
 typedef struct queue{
-	void* head;
-	void* tail;
+	node_t* head;
+	node_t* tail;
 }queue_t;
 
 
-process_t* createProcess(int id, char* name);
+node_t* createNode(void *element);
 queue_t* createQueue();
 void enqueue(queue_t *queue, void *element);
 void* dequeue(queue_t *queue);
-void printProcess(process_t* process);
-void printQueue(queue_t* queue);
-void freeQueue(queue_t* queue);
+void printProcess(process_t *process);
+void printQueue(queue_t *queue);
+void freeQueue(queue_t *queue);

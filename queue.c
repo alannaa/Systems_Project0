@@ -2,18 +2,19 @@
 #include <stdlib.h>
 #include "queue.h"
 
-process_t* createProcess(int id, char* name)
+//Creates a single node with `next` set to NULL
+node_t* createNode(void *element)
 {
-	process_t* newProc = (process_t*)malloc(sizeof(process_t));
-	if (newProc==NULL){
+	node_t* newNode = (node_t*)malloc(sizeof(node_t));
+	if (newNode==NULL){
 		return NULL;
 	}
-	newProc->id = id;
-	newProc->name = name;
-	newProc->next = NULL;
-	return newProc;
+	newNode->data = element;
+	newNode->next = NULL;
+	return newNode;
 }
 
+//Allocates heap space to a queue; `head` and `tail` set to NULL
 queue_t* createQueue()
 {
 	queue_t* newQ = (queue_t*)malloc(sizeof(queue_t));
@@ -31,19 +32,16 @@ void enqueue(queue_t *queue, void *element)
 	if (queue==NULL){
 		return;
 	}
-	process_t* newElem = (process_t*)malloc(sizeof(process_t*));
-	newElem = (process_t*)element;
+
+	node_t* newNode = createNode(element*);
 	
 	if (queue->head==NULL && queue->tail==NULL){
-		queue->head = newElem;
-		queue->tail = newElem;
+		queue->head = newNode;
+		queue->tail = newNode;
 	} else {
-		
-		((process_t*)queue->tail)->next = newElem;
-		queue->tail = newElem;
+		(queue->tail)->next = newNode;
+		queue->tail = newNode;
 	}
-	printf("Enqueue: ");
-	printProcess(newElem);
 }
 
 
@@ -53,14 +51,14 @@ void* dequeue(queue_t *queue)
 	if (queue==NULL || queue->head==NULL){
 		return NULL;
 	}
-	process_t* temp = ((process_t*)queue->head);
+
+	node_t* temp = queue->head;
 	queue->head = temp->next;
-	printf("Dequeue: ");
-        printProcess(temp);
-	return temp;
+	return temp->data;
 }
 
 
+//Printing Helpers
 void printProcess(process_t* process)
 {
         if (process==NULL){
@@ -71,16 +69,17 @@ void printProcess(process_t* process)
 
 }
 
+//Prints a queue that specifically contains type `process_t` 
 void printQueue(queue_t* queue)
 {
 	if(queue==NULL){
 		printf("queue is null");
 	}
 
-	process_t* nodeItr = queue->head;
+	node_t* nodeItr = queue->head;
 	printf(" - Queue: ");
 	while(nodeItr!=NULL){
-		printProcess(nodeItr);
+		printProcess(nodeItr->data);
 		if (nodeItr->next!=NULL){
 			printf(" -> ");
 		}
@@ -91,16 +90,18 @@ void printQueue(queue_t* queue)
 
 
 
-//Frees a queue and all of its elements from heap memory 
+//Frees a queue and all of its nodes from heap memory 
+//Note: this will not free elements that have been dequeued
 void freeQueue(queue_t *queue)
 {
 	if (queue==NULL){
 		return;
 	}
-	process_t* nodeItr = queue->head;
+	node_t* nodeItr = queue->head;
 	while(nodeItr!=NULL){
+		node_t* temp = nodeItr;
 		free(nodeItr);
-		nodeItr = nodeItr->next;
+		nodeItr = temp->next;
 	}
 	free(queue);
 }
