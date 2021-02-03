@@ -5,7 +5,7 @@
 //Creates a single object of type `process_t`
 process_t* makeProcess(int id, char* name)
 {
-	process_t* newProc = (process_t*)malloc(sizeof(process_c));
+	process_t* newProc = (process_t*)malloc(sizeof(process_t));
 	if (newProc==NULL){
 		return NULL;
 	}
@@ -63,10 +63,12 @@ void* dequeue(queue_t *queue)
 	if (queue==NULL || queue->head==NULL){
 		return NULL;
 	}
-
 	node_t* temp = queue->head;
+	void* tempData = temp->data;
+
 	queue->head = temp->next;
-	return temp->data;
+	free(temp);
+	return tempData;
 }
 
 
@@ -82,6 +84,7 @@ void printProcess(process_t *process)
 }
 
 //Prints a queue that specifically contains type `process_t` 
+//This could be made general by adding a function printNode(node)
 void printQueue(queue_t *queue)
 {
 	if(queue==NULL){
